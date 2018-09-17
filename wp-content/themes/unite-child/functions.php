@@ -131,3 +131,52 @@ function unite_child_get_taxonomy_labels( $singular_name, $name ) {
     );
 }
 
+/*
+ * Archive hook. Show "Country", "Genre", "Ticket Price", "Release Date".
+ */
+function unite_child_the_content( $content ) {
+    global $post;
+
+    $html = '';
+
+    /* show country list */
+    $country_list = get_the_term_list( get_the_ID(), 'film_country', '', __( ', ', 'unite' ), $after = '' );
+    if ( $country_list ) {
+        $html .= '<i class="fa fa-folder-open-o"></i> ' . $country_list . '. ';
+    }
+
+    /* show genre list */
+    $genre_list = get_the_term_list( get_the_ID(), 'film_genre', '', __( ', ', 'unite' ), $after = '' );
+    if ( $genre_list ) {
+        $html .= '<i class="fa fa-tags"></i> ' . $genre_list . '. ';
+    }
+
+    /* show ticket price */
+    $ticket_price = get_field('ticket_price');
+    if ( $ticket_price ) {
+        $html .= '<i class="fa fa-dollar"></i> <span class="meta-value">' . $ticket_price . '</span>. ';
+    }
+
+    /* show release date */
+    $release_date = get_field('release_date');
+    if ( $release_date ) {
+        $html .= '<i class="fa fa-clock-o"></i> <span class="meta-value">' . $release_date . '</span>. ';
+    }
+
+    if ( $html ) {
+        $content .= '<div class="entry-meta">' . $html . '</div>';
+    }
+
+    return $content;
+}
+
+add_action( 'get_template_part_content', 'unite_child_get_template_part', 10, 2 );
+function unite_child_get_template_part( $slug, $name ) {
+    if ( $slug == 'content' && ! $name ) {
+        add_filter( 'the_content', 'unite_child_the_content' );
+        add_filter( 'the_excerpt', 'unite_child_the_content' );
+    } else {
+        remove_filter( 'the_content', 'unite_child_the_content' );
+        remove_filter( 'the_excerpt', 'unite_child_the_content' );
+    }
+}
