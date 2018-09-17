@@ -10,3 +10,6 @@ Text Domain: unite-child
 
 /*************** ADD YOUR CUSTOM CSS HERE  ***************/
 
+.entry-meta .meta-value { font-size: 12px; margin-right: 0; }
+.recent-films { padding: 10px; margin: 0 0 10px; list-style: none; }
+.recent-films li { border-bottom: 1px solid #eee; display: block; padding: 10px 15px; }
