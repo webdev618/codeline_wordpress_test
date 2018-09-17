@@ -180,3 +180,29 @@ function unite_child_get_template_part( $slug, $name ) {
         remove_filter( 'the_excerpt', 'unite_child_the_content' );
     }
 }
+
+/*
+ * Recent films shortcode.
+ */
+add_shortcode( 'recent_films', 'unite_child_recent_films_shortcode' );
+function unite_child_recent_films_shortcode() {
+    $args = array(
+        'post_type' => 'film',
+        'posts_per_page' => 5,
+        'ignore_sticky_posts' => true
+    );
+
+    $recent_films = new WP_Query( $args );
+
+    $html = '';
+    if ( $recent_films->have_posts() ) {
+        $html .= '<ul class="recent-films">';
+        while ( $recent_films->have_posts() ) {
+            $recent_films->the_post();
+            $html .= '<li><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
+        }
+        $html .= '</ul>';
+    }
+
+    return $html;
+}
